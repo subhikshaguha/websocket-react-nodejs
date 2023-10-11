@@ -3,43 +3,33 @@ import Layout from '../components/Layout'
 import { useParams } from 'react-router-dom'
 import sendIcon from '../components/sendIcon'
 
-const ChatPage = () => {
+const ChatPage = ({socket}) => {
 
     const [messages, setMessages] = useState([]);
-    const [isConnectionOpen, setConnectionOpen] = useState(false)
+    const [isConnectionOpen, setConnectionOpen] = useState(true)
     const [messageBody, setMessageBody] = useState("");
 
     const { username } = useParams();
-    const ws = useRef();
+    // const ws = useRef();
 
     const sendMessage = () => {
         if(messageBody) {
-            ws.current.send(
-                JSON.stringify({
+          socket.emit('message',
+                {
                     sender: username,
                     body: messageBody,
-                })
+                }
             );
             setMessageBody("");
         }
     };
 
     useEffect(() => {
-        ws.current = new WebSocket("ws://localhost:8080");
-        ws.current.onopen = () => {
-            console.log("Connection Opened");
-            setConnectionOpen(true);
-        }
-        ws.current.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            console.log('my data here is', typeof data)
-            setMessages((_messages) => [..._messages, data]);
-        };
-        return () => {
-            console.log("Cleaning up...");
-            ws.current.close();
-        }
-    }, []);
+        socket.on('messageResponse', (event) => {
+            setMessages((_messages) => [..._messages, event]);
+        });
+
+    }, [socket]);
 
     const scrollTarget = useRef(null);
 
@@ -64,9 +54,9 @@ const ChatPage = () => {
                   </div>
                   <div className="ml-1">
                     <div className="text-sm font-bold leading-5 text-gray-900">
-                      {new Date(message.sentAt).toLocaleTimeString(undefined, {
+                      {/* {new Date(message.sentAt).toLocaleTimeString(undefined, {
                         timeStyle: "short",
-                      })}{" "}
+                      })}{" "} */}
                     </div>
                   </div>
                 </div>

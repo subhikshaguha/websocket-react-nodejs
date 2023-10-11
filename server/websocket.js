@@ -11,11 +11,9 @@ function sendMessage(message) {
 }
 
 server.on('connection', (ws) => {
-    console.log('test', ws, ws.id)
     const userRef = {ws}
     users.add(userRef)
     ws.on('message', (message) => {
-        console.log(message);
         try {
             const data = JSON.parse(message);
             if(typeof data.sender !== 'string' || typeof data.body !== 'string'){
