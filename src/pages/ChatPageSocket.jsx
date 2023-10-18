@@ -8,7 +8,7 @@ const ChatPage = ({socket}) => {
     const [messages, setMessages] = useState([]);
     const [isConnectionOpen, setConnectionOpen] = useState(true)
     const [messageBody, setMessageBody] = useState("");
-
+    const [isOnline, setIsOnline] = useState(navigator.onLine);
     const { username } = useParams();
 
     const sendMessage = () => {
@@ -30,6 +30,21 @@ const ChatPage = ({socket}) => {
 
     }, [socket]);
 
+    useEffect(() => {
+      function onlineHandler() {
+        setIsOnline(true);
+      }
+  
+      function offlineHandler() {
+        setIsOnline(false);
+      }
+      window.addEventListener("online", onlineHandler);
+      window.addEventListener("offline", offlineHandler);
+      return () => {
+        window.removeEventListener("online", onlineHandler);
+        window.removeEventListener("offline", offlineHandler);
+      };
+    }, []);
     const scrollTarget = useRef(null);
 
     useEffect(() => {
@@ -40,6 +55,7 @@ const ChatPage = ({socket}) => {
 
   return (
     <Layout>
+         <h2 className='text-3xl font-bold'>socket.io</h2>
         <div id="chat-view-container" className="flex flex-col w-1/3">
         {messages.map((message, index) => (
           <div key={index} className={`my-3 rounded py-3 w-1/3 text-white ${
@@ -72,7 +88,9 @@ const ChatPage = ({socket}) => {
         <p>
           You are chatting as <span className="font-bold">{username}</span>
         </p>
-
+        {!isOnline && (
+          <p className="text-red-500">Psst.. You are offline.</p>
+        )}
         <div className="flex flex-row">
           <input
             id="message"
@@ -87,7 +105,7 @@ const ChatPage = ({socket}) => {
             aria-label="Send"
             onClick={sendMessage}
             className="m-3"
-            disabled={!isConnectionOpen}
+            disabled={!isConnectionOpen || !isOnline}
           >
             {sendIcon}
           </button>

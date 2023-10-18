@@ -44,6 +44,7 @@ const ChatPageWebSocket = ({socket}) => {
 
   return (
     <Layout>
+        <h2 className='text-3xl font-bold'>WebSocket</h2>
         <div id="chat-view-container" className="flex flex-col w-1/3">
         {messages.map((message, index) => (
           <div key={index} className={`my-3 rounded py-3 w-1/3 text-white ${
