@@ -10,7 +10,6 @@ const ChatPage = ({socket}) => {
     const [messageBody, setMessageBody] = useState("");
 
     const { username } = useParams();
-    // const ws = useRef();
 
     const sendMessage = () => {
         if(messageBody) {
