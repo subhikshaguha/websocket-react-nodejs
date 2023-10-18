@@ -29,7 +29,7 @@ const ChatPageWebSocket = ({socket}) => {
         setConnectionOpen(true);
         socket.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            console.log('my data here is', typeof data)
+            console.log('my data here is', event)
             setMessages((_messages) => [..._messages, data]);
         };
     }, []);

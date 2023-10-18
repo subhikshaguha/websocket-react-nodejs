@@ -5,15 +5,15 @@ import ChatPageSocket from "./pages/ChatPageSocket";
 import ChatPageWebsocket from "./pages/ChatPageWebSocket";
 import socketIO from "socket.io-client"
 
-const socket = socketIO.connect("http://localhost:4000");
-// const socket = new WebSocket("ws://localhost:8080");
+// const socket = socketIO.connect("http://localhost:4000");
+const socket = new WebSocket("ws://localhost:8080");
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="/chat/:username" element={<ChatPageSocket socket={socket} />} />
-        {/* <Route path="/chat/:username" element={<ChatPageWebsocket socket={socket} />} /> */}
+        {/* <Route path="/chat/:username" element={<ChatPageSocket socket={socket} />} /> */}
+        <Route path="/chat/:username" element={<ChatPageWebsocket socket={socket} />} />
       </Routes>
     </BrowserRouter>
   )

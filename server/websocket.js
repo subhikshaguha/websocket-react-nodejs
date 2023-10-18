@@ -15,6 +15,7 @@ server.on('connection', (ws) => {
     users.add(userRef)
     ws.on('message', (message) => {
         try {
+            console.log('Message received', message);
             const data = JSON.parse(message);
             if(typeof data.sender !== 'string' || typeof data.body !== 'string'){
                 console.error('Invalid message');
