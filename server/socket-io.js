@@ -17,7 +17,14 @@ app.use(cors())
 socketIO.on('connection', (socket) => {
     console.log(`⚡: ${socket.id} user just connected!`)  
     socket.on("message", data => {
-      socketIO.emit("messageResponse", data)
+      // broadcast to all sockets except the one that sent the message
+      // socket.broadcast.emit("messageResponse", data);
+      // broadcast to all sockets including the one that sent the message
+      socketIO.emit("messageResponse", data);
+      
+      // socket.emit("message", data)
+      // emit to particular socket 
+      // socket.to(anotherSocketId).emit("private message", socket.id, msg);
     })
  
     socket.on('disconnect', () => {
